@@ -1,0 +1,39 @@
+.container{
+	width: 300px;
+	margin: 0 auto;
+}
+.chat-name{
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #bbb;
+	border-bottom: none;
+}
+.chat textarea{
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #bbb;
+	border-top: none;
+	max-width: 100%;
+}
+.chat-messages{
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #bbb;
+	height: 300px;
+	overflow-y: auto; 
+}
+p{
+	color: #bbb;
+}
+.chatStatus{
+	color:gainsboro;
+	font-weight: bold;
+	font-style: italic;
+}
+.chat-message{
+	margin-bottom: 10px;
+	padding: 10px;
+	background: #f5f5f5;
+	font-size: 12px;
+	font-family: sans-serif;
+}

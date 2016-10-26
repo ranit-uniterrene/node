@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+	<title>Chat</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<div class="container">
+	<div class="chat">
+		<input type="text" name="chat-name" class="chat-name" placeholder="Name">
+		<div class="chat-messages">
+		</div>
+		<textarea placeholder="message"></textarea>
+		<p>Chat Status: <span class="chatStatus"> idle</span></p>
+	</div>
+</div>
+</body>
+<script src="http://127.0.0.1:8080/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+(function(){
+	var getNode = function(s){
+		return document.querySelector(s);
+	};
+	var status = getNode('.chatStatus');
+	var messages = getNode('.chat-messages');
+	var textarea = getNode('.chat textarea');
+	var chatname = getNode('.chat-name'),
+		statusDefault = status.textContent,
+		setStatus = function(s){
+			status.textContent = s;
+			if(s !== statusDefault){
+				var delay = setTimeout(function(){
+					setStatus(statusDefault);
+					clearInterval(delay);
+				},3000);
+			}
+		};		
+		
+	 //var socket = io.connect('http://127.0.0.1:8080');
+	try{
+		var socket = io.connect('http://127.0.0.1:8080');
+	}catch(e){
+		//set status to warn
+	}
+
+	if(socket !== undefined){
+		//listen for op
+		socket.on('output',function(data){
+			if(data.length){
+				//loop rslt
+				for(var x=0; x < data.length; x = x+1){
+					var message = document.createElement('div');
+					message.setAttribute('class', 'chat-message');
+					message.textContent = data[x].name+': '+data[x].message;
+
+					//append
+					messages.appendChild(message);
+					messages.insertBefore(message, messages.firstChild);
+				}
+			}
+		});
+		//lisetn for status
+		socket.on('status',function(data){
+			setStatus((typeof data === 'object') ? data.message : data);
+			if(data.clear === true){
+				textarea.value = '';
+			}
+
+		});
+		console.log("connect ok!!");
+
+		textarea.addEventListener('keydown',function(event){
+			var self = this,
+				name = chatname.value;
+				//console.log(event);
+			if(event.which === 13 && event.shiftKey === false){
+				socket.emit('input',{
+					name: name,
+					message: self.value
+				});
+				console.log('sent!!');
+				event.preventDefault();
+			}
+		});
+	}
+
+})();
+</script>
+</html>
