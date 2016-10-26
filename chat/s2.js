@@ -7,6 +7,7 @@ http.createServer(function (req, res) {
 		res.end();
 
 }).listen(9000);
+//ranit added
 mongo.connect('mongodb://127.0.0.1/chat', function(err, db){
 	if(err) throw err;
 	client.on('connection', function(socket){
