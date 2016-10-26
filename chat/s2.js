@@ -1,6 +1,12 @@
 var http = require('http');
 var mongo = require('mongodb').MongoClient,
 	client = require('socket.io').listen(8080).sockets;
+http.createServer(function (req, res) {
+		res.writeHead(200,{'content-type':'text/html'});
+		res.write("http server successfully connected");
+		res.end();
+
+}).listen(9000);
 mongo.connect('mongodb://127.0.0.1/chat', function(err, db){
 	if(err) throw err;
 	client.on('connection', function(socket){
